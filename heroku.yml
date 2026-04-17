@@ -3,9 +3,9 @@ build:
     web: Dockerfile
   config:
     VITE_API_BASE_URL: /api
-release:
-  image: web
-  command:
-    - uv run --no-dev --locked -- alembic upgrade head
+# No release phase: bracket.app:app's lifespan runs init_db_when_empty()
+# (metadata.create_all + alembic stamp head on empty DBs) and then
+# alembic_run_migrations() for incremental upgrades on non-empty DBs.
+# See backend/bracket/utils/db_init.py.
 run:
   web: uv run --no-dev --locked -- gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind 0.0.0.0:$PORT --workers 2 --forwarded-allow-ips='*'

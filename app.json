@@ -24,8 +24,8 @@
       "value": "true"
     },
     "AUTO_RUN_MIGRATIONS": {
-      "description": "Disabled because the release phase runs Alembic.",
-      "value": "false"
+      "description": "Let the app run Alembic on boot. On an empty DB the app creates tables via SQLAlchemy and stamps head (see backend/bracket/utils/db_init.py); on existing DBs alembic upgrades incrementally.",
+      "value": "true"
     },
     "ALLOW_USER_REGISTRATION": {
       "description": "Set to false to prevent public signups. Change to true if you want open registration.",

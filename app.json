@@ -1,0 +1,72 @@
+{
+  "name": "Bracket",
+  "description": "Open-source tournament system.",
+  "repository": "https://github.com/ACBL-web/bracket",
+  "keywords": ["python", "fastapi", "react", "vite", "tournament", "bracket"],
+  "stack": "container",
+  "formation": {
+    "web": { "quantity": 1, "size": "basic" }
+  },
+  "addons": [
+    { "plan": "heroku-postgresql:essential-0", "as": "DATABASE" }
+  ],
+  "env": {
+    "ENVIRONMENT": {
+      "description": "Runtime environment flag read by bracket.config.",
+      "value": "PRODUCTION"
+    },
+    "API_PREFIX": {
+      "description": "Prefix under which API routes are mounted. Must match the frontend build-time VITE_API_BASE_URL.",
+      "value": "/api"
+    },
+    "SERVE_FRONTEND": {
+      "description": "Let the backend serve the built SPA from /app/frontend-dist.",
+      "value": "true"
+    },
+    "AUTO_RUN_MIGRATIONS": {
+      "description": "Disabled because the release phase runs Alembic.",
+      "value": "false"
+    },
+    "ALLOW_USER_REGISTRATION": {
+      "description": "Set to false to prevent public signups. Change to true if you want open registration.",
+      "value": "false"
+    },
+    "FORWARDED_ALLOW_IPS": {
+      "description": "Trust X-Forwarded-* from Heroku's router so HTTPS is detected correctly.",
+      "value": "*"
+    },
+    "JWT_SECRET": {
+      "description": "Secret used to sign JWTs. Rotate periodically.",
+      "generator": "secret"
+    },
+    "ADMIN_EMAIL": {
+      "description": "Email of the initial admin user, created on first boot if the DB is empty.",
+      "required": true
+    },
+    "ADMIN_PASSWORD": {
+      "description": "Password of the initial admin user. Rotate after first login.",
+      "generator": "secret"
+    },
+    "CORS_ORIGINS": {
+      "description": "Comma-separated list of allowed origins, e.g. https://bracket-prod.herokuapp.com. Never leave as '*' in production.",
+      "required": true
+    },
+    "BASE_URL": {
+      "description": "Public HTTPS URL of the app, used for SSO callbacks and similar.",
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "description": "Optional Sentry DSN for error reporting.",
+      "required": false
+    },
+    "CAPTCHA_SECRET": {
+      "description": "Optional hCaptcha server-side secret.",
+      "required": false
+    }
+  },
+  "scripts": {
+  },
+  "healthchecks": [
+    { "type": "startup", "name": "web", "path": "/ping" }
+  ]
+}

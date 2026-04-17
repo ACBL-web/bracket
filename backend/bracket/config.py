@@ -10,6 +10,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from bracket.utils.types import EnumAutoStr
 
+# Heroku Postgres exposes credentials via DATABASE_URL with a legacy `postgres://`
+# scheme. Rewrite it to `postgresql://` and surface it as PG_DSN so the rest of
+# the config remains platform-agnostic.
+if "PG_DSN" not in os.environ:
+    _heroku_db_url = os.environ.get("DATABASE_URL")
+    if _heroku_db_url:
+        os.environ["PG_DSN"] = _heroku_db_url.replace("postgres://", "postgresql://", 1)
+
 
 class Environment(EnumAutoStr):
     PRODUCTION = auto()

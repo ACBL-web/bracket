@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'deploy/heroku'
 
 jobs:
   build:

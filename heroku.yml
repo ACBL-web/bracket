@@ -1,0 +1,11 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    VITE_API_BASE_URL: /api
+release:
+  image: web
+  command:
+    - uv run --no-dev --locked -- alembic upgrade head
+run:
+  web: uv run --no-dev --locked -- gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind 0.0.0.0:$PORT --workers 2 --forwarded-allow-ips='*'

@@ -8,4 +8,8 @@ build:
 # alembic_run_migrations() for incremental upgrades on non-empty DBs.
 # See backend/bracket/utils/db_init.py.
 run:
-  web: uv run --no-dev --locked -- gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind 0.0.0.0:$PORT --workers 2 --forwarded-allow-ips='*'
+  # --workers 1: heroku-postgresql:essential-0 has a 20-connection limit and
+  # the app opens both an asyncpg pool (databases lib) and a sync SQLAlchemy
+  # engine pool. 1 worker keeps us comfortably under the cap; bump this only
+  # after upgrading to a Postgres plan with more connections.
+  web: uv run --no-dev --locked -- gunicorn -k uvicorn.workers.UvicornWorker bracket.app:app --bind 0.0.0.0:$PORT --workers 1 --forwarded-allow-ips='*'

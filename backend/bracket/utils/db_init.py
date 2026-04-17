@@ -117,9 +117,7 @@ async def init_db_when_empty() -> UserId | None:
     # schema with extension views such as pg_stat_statements, so a simple
     # "count(*) tables" check falsely reports the DB as non-empty. Use the
     # presence of Bracket's own `users` table as the source of truth.
-    users_table_exists = await database.fetch_val(
-        "SELECT to_regclass('public.users') IS NOT NULL"
-    )
+    users_table_exists = await database.fetch_val("SELECT to_regclass('public.users') IS NOT NULL")
     if config.admin_email and config.admin_password:
         if (not users_table_exists and environment != Environment.CI) or (
             environment is Environment.DEVELOPMENT and await get_user(config.admin_email) is None

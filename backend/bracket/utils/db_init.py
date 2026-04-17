@@ -113,11 +113,15 @@ async def create_admin_user() -> UserId:
 
 
 async def init_db_when_empty() -> UserId | None:
-    table_count = await database.fetch_val(
-        "SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'"
+    # Heroku Postgres (and other managed services) pre-populate the public
+    # schema with extension views such as pg_stat_statements, so a simple
+    # "count(*) tables" check falsely reports the DB as non-empty. Use the
+    # presence of Bracket's own `users` table as the source of truth.
+    users_table_exists = await database.fetch_val(
+        "SELECT to_regclass('public.users') IS NOT NULL"
     )
     if config.admin_email and config.admin_password:
-        if (table_count <= 1 and environment != Environment.CI) or (
+        if (not users_table_exists and environment != Environment.CI) or (
             environment is Environment.DEVELOPMENT and await get_user(config.admin_email) is None
         ):
             logger.warning("Empty db detected, creating tables...")

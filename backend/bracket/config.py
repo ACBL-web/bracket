@@ -12,11 +12,16 @@ from bracket.utils.types import EnumAutoStr
 
 # Heroku Postgres exposes credentials via DATABASE_URL with a legacy `postgres://`
 # scheme. Rewrite it to `postgresql://` and surface it as PG_DSN so the rest of
-# the config remains platform-agnostic.
+# the config remains platform-agnostic. Also force sslmode=require: essential-1
+# and higher Heroku Postgres plans enforce TLS at the pg_hba level and reject
+# cleartext connections; both psycopg2 and asyncpg (>=0.24) accept sslmode.
 if "PG_DSN" not in os.environ:
     _heroku_db_url = os.environ.get("DATABASE_URL")
     if _heroku_db_url:
-        os.environ["PG_DSN"] = _heroku_db_url.replace("postgres://", "postgresql://", 1)
+        _dsn = _heroku_db_url.replace("postgres://", "postgresql://", 1)
+        if "sslmode=" not in _dsn:
+            _dsn += ("&" if "?" in _dsn else "?") + "sslmode=require"
+        os.environ["PG_DSN"] = _dsn
 
 
 class Environment(EnumAutoStr):

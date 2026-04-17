@@ -21,10 +21,14 @@ def test_number_of_rounds_single_elimination() -> None:
     assert get_number_of_rounds_to_create_single_elimination(8) == 3
     assert get_number_of_rounds_to_create_single_elimination(16) == 4
     assert get_number_of_rounds_to_create_single_elimination(32) == 5
+    assert get_number_of_rounds_to_create_single_elimination(64) == 6
+    assert get_number_of_rounds_to_create_single_elimination(128) == 7
 
-    err_msg = re.escape("400: Number of teams invalid, should be one of [2, 4, 8, 16, 32]")
+    err_msg = re.escape(
+        "400: Number of teams invalid, should be one of [2, 4, 8, 16, 32, 64, 128]"
+    )
     with pytest.raises(HTTPException, match=err_msg):
-        get_number_of_rounds_to_create_single_elimination(64)
+        get_number_of_rounds_to_create_single_elimination(256)
 
     with pytest.raises(HTTPException, match=err_msg):
         get_number_of_rounds_to_create_single_elimination(1)

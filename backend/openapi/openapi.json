@@ -1685,7 +1685,7 @@
             "type": "integer"
           },
           "team_count": {
-            "maximum": 64.0,
+            "maximum": 128.0,
             "minimum": 2.0,
             "title": "Team Count",
             "type": "integer"
@@ -2159,7 +2159,7 @@
             "type": "integer"
           },
           "team_count": {
-            "maximum": 64.0,
+            "maximum": 128.0,
             "minimum": 2.0,
             "title": "Team Count",
             "type": "integer"

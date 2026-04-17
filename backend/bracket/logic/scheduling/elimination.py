@@ -95,6 +95,8 @@ def get_number_of_rounds_to_create_single_elimination(team_count: int) -> int:
         8: 3,
         16: 4,
         32: 5,
+        64: 6,
+        128: 7,
     }
     if team_count not in game_count_lookup:
         raise HTTPException(

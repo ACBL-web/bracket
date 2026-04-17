@@ -87,6 +87,12 @@ async def create_stage_item(
     stage_body: StageItemCreateBody,
     user: UserPublic = Depends(user_authenticated_for_tournament),
 ) -> SuccessResponse:
+    if stage_body.type == StageType.ROUND_ROBIN and stage_body.team_count > 32:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Round-robin stage items support a maximum of 32 teams",
+        )
+
     await check_foreign_keys_belong_to_tournament(stage_body, tournament_id)
 
     stages = await get_full_tournament_details(tournament_id)

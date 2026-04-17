@@ -123,6 +123,8 @@ function TeamCountSelectElimination({ form }: { form: UseFormReturnType<any> }) 
     { value: '8', label: '8' },
     { value: '16', label: '16' },
     { value: '32', label: '32' },
+    { value: '64', label: '64' },
+    { value: '128', label: '128' },
   ];
   return (
     <Select
@@ -148,6 +150,7 @@ function TeamCountInputRoundRobin({ form }: { form: UseFormReturnType<any> }) {
       placeholder=""
       mt="1rem"
       maw="50%"
+      max={32}
       {...form.getInputProps('team_count_round_robin')}
     />
   );
